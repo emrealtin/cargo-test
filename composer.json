@@ -1,0 +1,25 @@
+{
+    "name": "vendor/cargo-test",
+    "type": "library",
+    "license": "Emre Altin",
+    "autoload": {
+        "psr-4": {
+            "Vendor\\CargoTest\\": "src/"
+        }
+    },
+    "repositories": [
+        {
+            "type": "git",
+            "url": "https://github.com/emrealtin/cargo-base.git"
+        }
+    ],
+    "authors": [
+        {
+            "name": "emrealtin",
+            "email": "emre.altin@flo.com.tr"
+        }
+    ],
+    "require": {
+        "emrealtin/cargo-base": "^1.0"
+    }
+}
