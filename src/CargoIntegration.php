@@ -18,6 +18,14 @@ class CargoIntegration extends BaseAbstract implements CargoInterface
      * @var string
      */
     public $statusCode;
+    /**
+     * @var string
+     */
+    public $invoiceKey;
+    /**
+     * @var string
+     */
+    public $orgReceiverCustId;
 
     public function setCustomerCode($customerCode): string
     {
@@ -64,7 +72,11 @@ class CargoIntegration extends BaseAbstract implements CargoInterface
         $requestData = $this->createPackageRequestXml($requestData);
         $this->setRequest($requestData);
 
-        return $this->doRequest($this->getServiceUrl(), $this->getRequest(), ['Content-Type: text/xml; charset=utf-8'], $this->config);
+        $response = $this->doRequest($this->getServiceUrl(), $this->getRequest(), ['Content-Type: text/xml; charset=utf-8'], $this->config);
+
+        $this->setResponse($response);
+
+        return simplexml_load_string($response);
     }
 
     public function cancelPackage()
@@ -82,27 +94,60 @@ class CargoIntegration extends BaseAbstract implements CargoInterface
         $requestData = $this->getStatusRequestXml($requestData);
         $this->setRequest($requestData);
 
-        return $this->doRequest($this->getServiceUrl(), $this->getRequest(), ['Content-Type: text/xml; charset=utf-8'], $this->config);
+        $response = $this->doRequest($this->getServiceUrl(), $this->getRequest(), ['Content-Type: text/xml; charset=utf-8'], $this->config);
+
+        $this->setResponse($response);
+
+        return $response;
     }
 
-    public function getStatusRequestXml($request) :string
+    public function getStatusRequestXml($request): string
     {
         return '<?xml version="1.0" encoding="UTF-8"?>
-              <ns1:integrationCode>'.$request['integrationCode'].'</ns1:integrationCode>
-              <ns1:customerCode>'.$request['customerCode'].'</ns1:customerCode>
+              <ns1:integrationCode>' . $request['integrationCode'] . '</ns1:integrationCode>
+              <ns1:customerCode>' . $request['customerCode'] . '</ns1:customerCode>
             </xml>';
     }
 
-    public function createPackageRequestXml($request) :string
+    public function createPackageRequestXml($request): string
     {
         return '<?xml version="1.0" encoding="UTF-8"?>
-              <ns1:integrationCode>'.$request['integrationCode'].'</ns1:integrationCode>
-              <ns1:customerCode>'.$request['customerCode'].'</ns1:customerCode>
-              <ns1:receiverName>'.$request['customerCode'].'</ns1:receiverName>
-              <ns1:receiverAddress>'.$request['customerCode'].'</ns1:receiverAddress>
-              <ns1:receiverCity>'.$request['customerCode'].'</ns1:receiverCity>
-              <ns1:receiverTown>'.$request['customerCode'].'</ns1:receiverTown>
-              <ns1:receiverPhone>'.$request['customerCode'].'</ns1:receiverPhone>
+              <ns1:integrationCode>' . $request['integrationCode'] . '</ns1:integrationCode>
+              <ns1:customerCode>' . $request['customerCode'] . '</ns1:customerCode>
+              <ns1:receiverName>' . $request['customerCode'] . '</ns1:receiverName>
+              <ns1:receiverAddress>' . $request['customerCode'] . '</ns1:receiverAddress>
+              <ns1:receiverCity>' . $request['customerCode'] . '</ns1:receiverCity>
+              <ns1:receiverTown>' . $request['customerCode'] . '</ns1:receiverTown>
+              <ns1:receiverPhone>' . $request['customerCode'] . '</ns1:receiverPhone>
             </xml>';
+    }
+
+    public function setInvoiceKey($invoiceKey): string
+    {
+        $this->invoiceKey = $invoiceKey;
+    }
+
+    public function getInvoiceKey(): string
+    {
+        return $this->invoiceKey;
+    }
+
+    public function setOrgReceiverCustId($orgReceiverCustId): string
+    {
+        $this->orgReceiverCustId = $orgReceiverCustId;
+    }
+
+    public function getOrgReceiverCustId(): string
+    {
+        return $this->orgReceiverCustId;
+    }
+
+    public function setResponse($response)
+    {
+        $this->response = $response;
+        $this->setResultCode($response->Body->SetOrderResponse->SetOrderResult->OrderResultInfo->resultCode);
+        $this->setResultMessage($response->Body->SetOrderResponse->SetOrderResult->OrderResultInfo->resultMessage);
+        $this->setInvoiceKey($response->Body->SetOrderResponse->SetOrderResult->OrderResultInfo->InvoiceKey);
+        $this->setOrgReceiverCustId($response->Body->SetOrderResponse->SetOrderResult->OrderResultInfo->OrgReceiverCustId);
     }
 }

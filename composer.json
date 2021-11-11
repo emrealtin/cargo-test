@@ -20,7 +20,13 @@
         }
     ],
     "require": {
-        "cargo/base": "dev-master"
+        "cargo/base": "dev-master",
+        "ext-json": "*",
+        "ext-soap": "*",
+        "ext-simplexml": "*"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^7.5"
     },
     "prefer-stable": true
 }
