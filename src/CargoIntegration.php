@@ -56,6 +56,17 @@ class CargoIntegration extends BaseAbstract implements CargoInterface
             'customerCode' => $this->getCustomerCode()
         ];
 
-        return $this->doRequest($this->getServiceUrl(), $requestData, '', $this->config);
+        $requestData = $this->requestXml($requestData);
+        $this->setRequest($requestData);
+
+        return $this->doRequest($this->getServiceUrl(), $this->getRequest(), ['Content-Type: text/xml; charset=utf-8'], $this->config);
+    }
+
+    public function requestXml($request)
+    {
+        return '<?xml version="1.0" encoding="UTF-8"?>
+              <ns1:integrationCode>'.$request['integrationCode'].'</ns1:integrationCode>
+              <ns1:customerCode>'.$request['customerCode'].'</ns1:customerCode>
+            </xml>';
     }
 }
