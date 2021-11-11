@@ -10,7 +10,12 @@ class createPackage
         $integration->setServiceUrl('test.url');
         $integration->setConfig(['username' => 'test', 'password' => 'test']);
         $integration->setIntegrationCode('123456');
-        $integration->setCustomerCode('123456');
-        $integration->createPackage();
+        $integration->setReceiverName('Test');
+        $integration->setReceiverAddress('Test Address');
+        $integration->setReceiverCity('Test');
+        $integration->setReceiverTown('Test');
+        $integration->setReceiverPhone('123456789');
+        $integration->setSenderName('Test');
+        return $integration->createPackage();
     }
 }
