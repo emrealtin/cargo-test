@@ -1,6 +1,6 @@
 <?php
 
-class getStatus
+class cargoTracking
 {
     public function __construct()
     {
@@ -13,6 +13,6 @@ class getStatus
         $integration->setConfig(['username' => 'test', 'password' => 'test']);
         $integration->setIntegrationCode('123456');
         $integration->setCustomerCode('123456');
-        return $integration->getStatus();
+        return $integration->cargoTracking();
     }
 }
