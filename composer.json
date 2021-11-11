@@ -1,10 +1,10 @@
 {
-    "name": "vendor/cargo-test",
+    "name": "cargo/test",
     "type": "library",
     "license": "Emre Altin",
     "autoload": {
         "psr-4": {
-            "Vendor\\CargoTest\\": "src/"
+            "Cargo\\Test\\": "src/"
         }
     },
     "repositories": [
@@ -20,6 +20,7 @@
         }
     ],
     "require": {
-        "emrealtin/cargo-base": "^1.0"
-    }
+        "cargo/base": "dev-master"
+    },
+    "prefer-stable": true
 }
